@@ -1,0 +1,86 @@
+﻿<%- include('./partials/header') %>
+
+<%
+  let totalMRP = 0;
+  let totalDiscount = 0;
+  items.forEach(function (item) {
+    totalMRP += item.product.price * item.qty;
+    totalDiscount += (item.product.discount || 0) * item.qty;
+  });
+  let platformFee = items.length > 0 ? 20 : 0;
+  let totalAmount = totalMRP - totalDiscount + platformFee;
+%>
+
+<div class="w-full min-h-screen flex flex-col md:flex-row items-start px-5 md:px-20 pt-28 pb-10 gap-6 md:gap-10">
+    <div class="w-full md:w-[40%] flex flex-col gap-5">
+        <% if (items.length === 0) { %>
+            <p>Your cart is empty.</p>
+            <a class="underline" href="/shop">Go to shop</a>
+        <% } %>
+
+        <% items.forEach(function (item) {
+             const product = item.product;
+             const bgStyle = 'background:' + product.bgcolor + ';';
+             const panelStyle = 'background:' + product.panelcolor + ';color:' + product.textcolor + ';';
+             const netTotal = (product.price - (product.discount || 0)) * item.qty;
+        %>
+            <div class="w-full rounded-md overflow-hidden">
+                <div class="w-full h-72 md:h-80 flex items-center justify-center" style="<%= bgStyle %>">
+                    <img class="h-full max-w-full object-contain p-4"
+                         src="data:image/jpeg;base64,<%= product.image.toString('base64') %>" alt="">
+                </div>
+                <div class="w-full flex justify-between items-center px-5 py-4" style="<%= panelStyle %>">
+                    <h3 class="text-xl md:text-2xl"><%= product.name %></h3>
+                    <div class="flex items-center gap-2">
+                        <a href="/increase/<%= product._id %>"
+                           class="w-7 h-7 bg-white text-black flex rounded-full items-center justify-center">
+                            <i class="ri-add-line"></i>
+                        </a>
+                        <div class="px-2 py-1 rounded-md bg-white text-black"><%= String(item.qty).padStart(2, '0') %></div>
+                        <a href="/decrease/<%= product._id %>"
+                           class="w-7 h-7 bg-white text-black flex rounded-full items-center justify-center">
+                            <i class="ri-subtract-line"></i>
+                        </a>
+                    </div>
+                </div>
+                <div class="flex items-center justify-between px-5 py-3">
+                    <h4 class="text-lg">Net Total</h4>
+                    <h2 class="text-lg">₹ <%= netTotal %></h2>
+                </div>
+                <div class="px-5 pb-4">
+                    <a href="/removefromcart/<%= product._id %>"
+                       class="inline-block px-4 py-2 text-sm rounded-md bg-red-500 text-white">Remove</a>
+                </div>
+            </div>
+        <% }) %>
+    </div>
+
+    <div class="w-full md:w-[60%]">
+        <h3 class="text-xl">Price Breakdown</h3>
+        <div class="px-2 md:px-10 mt-5">
+            <div class="flex mt-2">
+                <h4 class="w-1/2 md:w-1/3">Total MRP</h4>
+                <h4>₹ <%= totalMRP %></h4>
+            </div>
+            <div class="flex mt-2">
+                <h4 class="w-1/2 md:w-1/3">Discount on MRP</h4>
+                <h4>₹ <%= totalDiscount %></h4>
+            </div>
+            <div class="flex mt-2">
+                <h4 class="w-1/2 md:w-1/3">Platform Fee</h4>
+                <h4>₹ <%= platformFee %></h4>
+            </div>
+            <div class="flex mt-2">
+                <h4 class="w-1/2 md:w-1/3">Shipping Fee</h4>
+                <h4>FREE</h4>
+            </div>
+        </div>
+        <div class="w-full h-[1px] bg-black mt-10"></div>
+        <div class="flex mt-5">
+            <h3 class="w-1/2 md:w-1/3 text-xl">Total Amount</h3>
+            <h3 class="font-semibold text-xl text-green-600">₹ <%= totalAmount %></h3>
+        </div>
+    </div>
+</div>
+
+<%- include('./partials/footer') %>

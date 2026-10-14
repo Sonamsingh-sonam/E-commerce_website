@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.2.0/fonts/remixicon.css" rel="stylesheet" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="font-['helvetica_now_display'] bg-[#FAF5EF]">
+
+    <nav class="w-full fixed top-0 left-0 z-50 px-8 py-4 
+                flex items-center justify-between 
+                bg-red-200 text-[#292321] shadow-lg ">
+
+        <!-- Logo -->
+        <a href="/" class="text-4xl font-bold tracking-wide   hover:text-indigo-200 transition duration-300">
+            Scatch
+        </a>
+
+        <% if (typeof loggedIn !== 'undefined' && loggedIn) { %>
+
+        <!-- Laptop: tumhare original links (sirf md se bade screen par) -->
+        <div class="hidden md:flex items-center gap-8 text-2xl font-medium ">
+
+            <a href="/shop" 
+               class="hover:text-indigo-200 transition duration-300 ">
+                Shop
+            </a>
+
+            <a href="/cart" 
+               class="hover:text-indigo-200 transition duration-300">
+                Cart
+            </a>
+
+            <a href="/myaccount" 
+               class="hover:text-indigo-200 transition duration-300">
+                My Account
+            </a>
+
+            <a href="/logout" 
+               class="px-4 py-2 rounded-lg bg-white text-red-950
+                      hover:bg-indigo-100 transition duration-300">
+                Logout
+            </a>
+
+        </div>
+
+        <!-- Phone: hamburger button -->
+        <button id="menuBtn" class="md:hidden text-4xl leading-none" aria-label="Open menu">
+            <i class="ri-menu-3-line"></i>
+        </button>
+
+        <% } %>
+
+    </nav>
+
+    <% if (typeof loggedIn !== 'undefined' && loggedIn) { %>
+
+    <!-- Kala parda -->
+    <div id="menuOverlay" class="fixed inset-0 bg-black/50 z-[55] hidden"></div>
+
+    <!-- Phone side menu -->
+    <aside id="sideMenu"
+           class="fixed top-0 right-0 h-full w-64 z-[60] p-6 md:hidden
+                  bg-[#FAF5EF] text-[#292321] shadow-lg
+                  transform translate-x-full transition-transform duration-300">
+
+        <button id="closeBtn" class="text-4xl leading-none mb-8" aria-label="Close menu">
+            <i class="ri-close-line"></i>
+        </button>
+
+        <div class="flex flex-col gap-6 text-2xl font-medium">
+            <a href="/shop" class="hover:text-indigo-200 transition duration-300">Shop</a>
+            <a href="/cart" class="hover:text-indigo-200 transition duration-300">Cart</a>
+            <a href="/myaccount" class="hover:text-indigo-200 transition duration-300">My Account</a>
+            <a href="/logout"
+               class="px-4 py-2 rounded-lg bg-white text-red-950 text-center
+                      hover:bg-indigo-100 transition duration-300">
+                Logout
+            </a>
+        </div>
+    </aside>
+
+    <script>
+        const menuBtn = document.getElementById("menuBtn");
+        const closeBtn = document.getElementById("closeBtn");
+        const sideMenu = document.getElementById("sideMenu");
+        const overlay = document.getElementById("menuOverlay");
+
+        function openMenu() {
+            sideMenu.classList.remove("translate-x-full");
+            overlay.classList.remove("hidden");
+        }
+        function closeMenu() {
+            sideMenu.classList.add("translate-x-full");
+            overlay.classList.add("hidden");
+        }
+
+        menuBtn.addEventListener("click", openMenu);
+        closeBtn.addEventListener("click", closeMenu);
+        overlay.addEventListener("click", closeMenu);
+    </script>
+
+    <% } %>
